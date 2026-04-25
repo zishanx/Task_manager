@@ -10,7 +10,7 @@ function Home() {
 
     const fetchAllTasks = async () => {
         try {
-            const res = await fetch('http://localhost:5000/tasks')
+            const res = await fetch('https://task-manager-nwae.onrender.com')
             const data = await res.json()
             setAllTasks(data)
         } catch (err) {
@@ -20,7 +20,7 @@ function Home() {
 
     const fetchTasks = async () => {
         try {
-            let url = 'http://localhost:5000/tasks'
+            let url = 'https://task-manager-nwae.onrender.com'
             if (filter === 'completed') url += '?completed=true'
             if (filter === 'active') url += '?completed=false'
             const res = await fetch(url)

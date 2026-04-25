@@ -9,7 +9,7 @@ function AddTask() {
     const handleSubmit = async () => {
         if (!title) return alert('Title is required')
         try {
-            await fetch('http://localhost:5000/tasks', {
+            await fetch('https://task-manager-nwae.onrender.com', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, description })
