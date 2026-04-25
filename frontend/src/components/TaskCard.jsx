@@ -2,7 +2,7 @@ function TaskCard({ task, onDelete }) {
 
     const handleDelete = async () => {
         try {
-            await fetch(`https://task-manager-nwae.onrender.com/${task._id}`, {
+            await fetch(`https://task-manager-nwae.onrender.com/tasks/${task._id}`, {
                 method: 'DELETE'
             })
             onDelete()
@@ -13,7 +13,7 @@ function TaskCard({ task, onDelete }) {
 
     const handleToggle = async () => {
         try {
-            await fetch(`https://task-manager-nwae.onrender.com/${task._id}`, {
+            await fetch(`https://task-manager-nwae.onrender.com/tasks/${task._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ completed: !task.completed })
