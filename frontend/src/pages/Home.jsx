@@ -2,17 +2,27 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TaskCard from '../components/TaskCard';
 
-
 function Home() {
     const [tasks, setTasks] = useState([])
-    const [filter,setFilter] = useState('all')
+    const [allTasks, setAllTasks] = useState([])
+    const [filter, setFilter] = useState('all')
     const navigate = useNavigate()
+
+    const fetchAllTasks = async () => {
+        try {
+            const res = await fetch('http://localhost:5000/tasks')
+            const data = await res.json()
+            setAllTasks(data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     const fetchTasks = async () => {
         try {
             let url = 'http://localhost:5000/tasks'
-            if(filter === 'completed') url += '?completed=true'
-            if(filter === 'active') url += '?completed=false'
+            if (filter === 'completed') url += '?completed=true'
+            if (filter === 'active') url += '?completed=false'
             const res = await fetch(url)
             const data = await res.json()
             setTasks(data)
@@ -22,24 +32,53 @@ function Home() {
     }
 
     useEffect(() => {
+        fetchAllTasks()
+    }, [])
+
+    useEffect(() => {
         fetchTasks()
+        fetchAllTasks()
     }, [filter])
+
+    const total = allTasks.length
+    const done = allTasks.filter(t => t.completed).length
+    const active = allTasks.filter(t => !t.completed).length
 
     return (
         <div>
-            <h1>My Tasks</h1>
-            <button onClick={() => navigate('/add')}>Add Task</button>
-            <div>
-                <button onClick={()=> setFilter('all')}>All</button>
-                <button onClick={()=> setFilter('active')}>Active</button>
-                <button onClick={()=> setFilter('completed')}>Completed</button>
+            <div className='header'>
+                <div className='logo'>task<span>.</span>io</div>
+                <button className='add-btn' onClick={() => navigate('/add')}>+ Add Task</button>
             </div>
-            {tasks.map(task => (
-                <TaskCard key={task._id} task={task} onDelete={fetchTasks}></TaskCard>
-            ))}
+
+            <div className='stats'>
+                <div className='stat'>
+                    <div className='stat-num s-purple'>{total}</div>
+                    <div className='stat-label'>Total</div>
+                </div>
+                <div className='stat'>
+                    <div className='stat-num s-teal'>{done}</div>
+                    <div className='stat-label'>Done</div>
+                </div>
+                <div className='stat'>
+                    <div className='stat-num s-pink'>{active}</div>
+                    <div className='stat-label'>Active</div>
+                </div>
+            </div>
+
+            <div className='filters'>
+                <button className={`filter-btn ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>All</button>
+                <button className={`filter-btn ${filter === 'active' ? 'active' : ''}`} onClick={() => setFilter('active')}>Active</button>
+                <button className={`filter-btn ${filter === 'completed' ? 'active' : ''}`} onClick={() => setFilter('completed')}>Completed</button>
+            </div>
+
+            <div className='tasks'>
+                {tasks.map(task => (
+                    <TaskCard key={task._id} task={task} onDelete={() => { fetchTasks(); fetchAllTasks(); }} />
+                ))}
+            </div>
         </div>
     )
-
 }
 
-export default Home;
+export default Home

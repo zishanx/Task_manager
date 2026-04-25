@@ -1,4 +1,4 @@
-export default function TaskCard({ task, onDelete }) {
+function TaskCard({ task, onDelete }) {
 
     const handleDelete = async () => {
         try {
@@ -10,6 +10,7 @@ export default function TaskCard({ task, onDelete }) {
             console.log(err)
         }
     }
+
     const handleToggle = async () => {
         try {
             await fetch(`http://localhost:5000/tasks/${task._id}`, {
@@ -22,13 +23,24 @@ export default function TaskCard({ task, onDelete }) {
             console.log(err)
         }
     }
+
     return (
-        <div>
-            <h3>{task.title}</h3>
-            <p>{task.description}</p>
-            <p>{task.completed ? 'Completed' : 'Not Completed'}</p>
-            <button onClick={handleDelete}>Delete</button>
-            <button onClick={handleToggle}>Toggle Complete</button>
+        <div className={`task-card ${task.completed ? 'done' : ''}`}>
+            <div className='check-wrap'>
+                <div
+                    className={`check ${task.completed ? 'checked' : ''}`}
+                    onClick={handleToggle}
+                ></div>
+            </div>
+            <div className='task-body'>
+                <div className='task-title'>{task.title}</div>
+                {task.description && <div className='task-desc'>{task.description}</div>}
+            </div>
+            <div className='task-actions'>
+                <button className='icon-btn' onClick={handleDelete}>✕</button>
+            </div>
         </div>
     )
 }
+
+export default TaskCard
