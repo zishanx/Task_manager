@@ -26,19 +26,25 @@ function TaskCard({ task, onDelete }) {
 
     return (
         <div className={`task-card ${task.completed ? 'done' : ''}`}>
-            <div className='check-wrap'>
+
+            <div className="check-wrap">
                 <div
                     className={`check ${task.completed ? 'checked' : ''}`}
                     onClick={handleToggle}
-                ></div>
+                />
             </div>
-            <div className='task-body'>
-                <div className='task-title'>{task.title}</div>
-                {task.description && <div className='task-desc'>{task.description}</div>}
+
+            <div className="task-body">
+                <div className="task-title">{task.title}</div>
+                {task.description && (
+                    <div className="task-desc">{task.description}</div>
+                )}
             </div>
-            <div className='task-actions'>
-                <button className='icon-btn' onClick={handleDelete}>✕</button>
+
+            <div className="task-actions">
+                <button className="icon-btn" onClick={handleDelete}>✕</button>
             </div>
+
         </div>
     )
 }
